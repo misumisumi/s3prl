@@ -57,7 +57,7 @@ class FeatureExtractor(nn.Module):
         self.decode_wav = decode_wav
         if self.decode_wav:
             # HACK: sox cannot deal with wav with incorrect file length
-            torchaudio.set_audio_backend("soundfile")
+            torchaudio.backend("soundfile")
 
     def _load_file(self, filepath):
         if self.decode_wav:

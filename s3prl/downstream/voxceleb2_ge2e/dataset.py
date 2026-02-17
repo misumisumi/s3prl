@@ -49,7 +49,7 @@ from torch.utils.data.sampler import Sampler, BatchSampler
 from pathlib import Path
 from sox import Transformer
 import concurrent.futures
-# torchaudio.set_audio_backend("sox_io")
+# torchaudio.backend("sox_io")
 max_timestep = int(16000 * 8)
 # Voxceleb 1 + 2 
 # preprocessing need seperate folder to dev, train, test
