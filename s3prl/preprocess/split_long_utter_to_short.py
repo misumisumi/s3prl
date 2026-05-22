@@ -17,7 +17,6 @@ import torchaudio
 from tqdm import tqdm
 from pathlib import Path
 from joblib import Parallel, delayed
-torchaudio.set_audio_backend("sox_io")
 
 
 #############################
@@ -42,7 +41,7 @@ def get_preprocess_args():
 # SPLIT AND SAVE #
 ##################
 def split_and_save(input_file, current_split, args):
-    wav, sr = torchaudio.load(input_file)
+    wav, sr = torchaudio.load(input_file, backend="sox_io")
     
     # compute the size of each chunk
     chunk_size = args.split_size*sr

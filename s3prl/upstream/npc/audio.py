@@ -68,12 +68,11 @@ class FeatureExtractor(nn.Module):
         self.kwargs = kwargs
         self.decode_wav = decode_wav
         if self.decode_wav:
-            # HACK: sox cannot deal with wav with incorrect file length
-            torchaudio.set_audio_backend("soundfile")
+            pass
 
     def _load_file(self, filepath):
         if self.decode_wav:
-            waveform, sample_rate = torchaudio.load_wav(filepath)
+            waveform, sample_rate = torchaudio.load(filepath, backend="soundfile")
         else:
             waveform, sample_rate = torchaudio.load(filepath)
         return waveform, sample_rate

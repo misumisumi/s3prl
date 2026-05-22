@@ -50,9 +50,9 @@ class LoadAudio(DataPipe):
     ):
         crop_segment = start_sec is not None and end_sec is not None
 
-        torchaudio.set_audio_backend("sox_io")
         wav, sr = torchaudio.load(
             wav_path,
+            backend="sox_io",
             frame_offset=round(start_sec * self.audio_sample_rate)
             if crop_segment
             else 0,

@@ -47,8 +47,7 @@ def get_audio_info(
                 info = json.load(f)
                 return info
 
-        torchaudio.set_audio_backend("sox_io")
-        torchaudio_info = torchaudio.info(audio_path)
+        torchaudio_info = torchaudio.info(audio_path, backend="sox_io")
         info = {
             "sample_rate": torchaudio_info.sample_rate,
             "num_frames": torchaudio_info.num_frames,

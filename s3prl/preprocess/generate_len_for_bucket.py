@@ -42,8 +42,7 @@ def get_preprocess_args():
 # EXTRACT LENGTH #
 ##################
 def extract_length(input_file):
-    torchaudio.set_audio_backend("sox_io")
-    return torchaudio.info(input_file).num_frames
+    return torchaudio.info(input_file, backend="sox_io").num_frames
 
 
 ###################
