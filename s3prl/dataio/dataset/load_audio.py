@@ -20,8 +20,6 @@ class LoadAudio(Dataset):
         filepaths: List[str],
         start_secs: List[float] = None,
         end_secs: List[float] = None,
-        sox_effects: Tuple[Tuple[str]] = None,
-        individual_sox_effects: List[Tuple[Tuple[str]]] = None,
         max_secs: float = None,
         generator: random.Random = None,
         sample_rate: int = 16000,
@@ -42,13 +40,6 @@ class LoadAudio(Dataset):
             2,
         ], "start_secs and end_secs must both be given if anyone is given"
 
-        assert (
-            int(sox_effects is not None) + int(individual_sox_effects is not None) <= 1
-        )
-        if sox_effects is not None:
-            individual_sox_effects = [sox_effects for _ in range(len(filepaths))]
-        self.individual_sox_effects = individual_sox_effects
-
     def __len__(self):
         return len(self.filepaths)
 
@@ -66,9 +57,6 @@ class LoadAudio(Dataset):
         )
         assert sr == self.sample_rate
         wav = torch.FloatTensor(y).view(1, -1)
-
-        if self.individual_sox_effects is not None:
-            pass
 
         if sr != self.sample_rate:
             wav, sr = torchaudio.transforms.Resample(sr, self.sample_rate)(wav)

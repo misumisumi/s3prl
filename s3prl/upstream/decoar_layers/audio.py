@@ -42,7 +42,7 @@ class FeatureExtractor(nn.Module):
     """Feature extractor, transforming file path to Mel spectrogram"""
 
     def __init__(
-        self, mode="fbank", num_mel_bins=80, decode_wav=False, apply_cmvn=True, **kwargs
+        self, mode="fbank", num_mel_bins=80, apply_cmvn=True, **kwargs
     ):
         super(FeatureExtractor, self).__init__()
         # ToDo: Other surface representation
@@ -54,15 +54,9 @@ class FeatureExtractor(nn.Module):
             self.cmvn = CMVN()
         self.num_mel_bins = num_mel_bins
         self.kwargs = kwargs
-        self.decode_wav = decode_wav
-        if self.decode_wav:
-            pass
 
     def _load_file(self, filepath):
-        if self.decode_wav:
-            waveform, sample_rate = torchaudio.load(filepath, backend="soundfile")
-        else:
-            waveform, sample_rate = torchaudio.load(filepath)
+        waveform, sample_rate = torchaudio.load(filepath)
         return waveform, sample_rate
 
     def forward(self, waveform):

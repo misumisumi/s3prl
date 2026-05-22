@@ -35,7 +35,6 @@ class SetOutputKeys(DataPipe):
 class LoadAudio(DataPipe):
     audio_sample_rate: int = 16000
     audio_channel_reduction: str = "first"
-    sox_effects: list = None
 
     wav_path_name: str = "wav_path"
     wav_name: str = "wav"
@@ -60,9 +59,6 @@ class LoadAudio(DataPipe):
             if crop_segment
             else -1,
         )
-
-        if self.sox_effects is not None:
-            pass
 
         if sr != self.audio_sample_rate:
             resampler = torchaudio.transforms.Resample(sr, self.audio_sample_rate)
