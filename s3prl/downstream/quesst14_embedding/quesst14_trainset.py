@@ -7,7 +7,6 @@ from pathlib import Path
 
 import torch
 from torch.utils.data.dataset import Dataset
-from torchaudio.sox_effects import apply_effects_file, apply_effects_tensor
 
 
 class QUESST14Trainset(Dataset):
@@ -129,7 +128,7 @@ def parse_lst(lst_path):
 
 
 def path2tensor(filepath):
-    tensor, _ = apply_effects_file(
+    tensor, _ = torchaudio.load(
         str(filepath),
         [
             ["channels", "1"],
@@ -143,7 +142,7 @@ def path2tensor(filepath):
 def crop_segment(tensor, tgt_dur, sample_rate=16000):
     src_dur = len(tensor) / sample_rate
     random_shift = random.uniform(0, src_dur - tgt_dur)
-    audio_tensor, _ = apply_effects_tensor(
+    audio_tensor, _ = torchaudio.load(
         tensor.unsqueeze(0),
         sample_rate,
         [

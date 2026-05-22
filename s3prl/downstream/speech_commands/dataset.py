@@ -2,7 +2,6 @@ from random import randint
 from pathlib import Path
 
 from torch.utils.data.dataset import Dataset
-from torchaudio.sox_effects import apply_effects_file
 
 CLASSES = [
     "yes",
@@ -32,7 +31,7 @@ class SpeechCommandsBaseDataset(Dataset):
 
     def __getitem__(self, idx):
         class_name, audio_path = self.data[idx]
-        wav, _ = apply_effects_file(str(audio_path), EFFECTS)
+        wav, _ = torchaudio.load(str(audio_path), EFFECTS)
         wav = wav.squeeze(0).numpy()
         fileid = "-".join(Path(audio_path).parts[-2:])
         return wav, self.class2index[class_name], fileid

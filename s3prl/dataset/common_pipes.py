@@ -62,9 +62,7 @@ class LoadAudio(DataPipe):
         )
 
         if self.sox_effects is not None:
-            wav, sr = torchaudio.sox_effects.apply_effects_tensor(
-                wav, sr, effects=self.sox_effects
-            )
+            pass
 
         if sr != self.audio_sample_rate:
             resampler = torchaudio.transforms.Resample(sr, self.audio_sample_rate)

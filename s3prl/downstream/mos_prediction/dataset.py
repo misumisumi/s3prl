@@ -4,7 +4,6 @@ import os
 import random
 import torch
 from torch.utils.data.dataset import Dataset
-from torchaudio.sox_effects import apply_effects_file
 from itertools import accumulate
 
 
@@ -27,7 +26,7 @@ class VCC18SegmentalDataset(Dataset):
     def __getitem__(self, idx):
         wav_name, mean, mos, judge_id = self.dataframe.loc[idx]
         wav_path = self.base_path / "Converted_speech_of_submitted_systems" / wav_name
-        wav, _ = apply_effects_file(
+        wav, _ = torchaudio.load(
             str(wav_path),
             [
                 ["channels", "1"],
@@ -91,7 +90,7 @@ class VCC16SegmentalDataset(Dataset):
     def __getitem__(self, idx):
         wav_name = self.wav_list[idx]
         wav_path = self.wav_dir / wav_name
-        wav, _ = apply_effects_file(
+        wav, _ = torchaudio.load(
             str(wav_path),
             [
                 ["channels", "1"],

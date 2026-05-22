@@ -12,7 +12,6 @@ import sys
 import time
 import tqdm
 import pickle
-from torchaudio.sox_effects import apply_effects_file
 
 EFFECTS = [
 ["channels", "1"],
@@ -64,7 +63,7 @@ class SpeakerVerifi_train(Dataset):
 
                     for wav in wav_list:
 
-                        wav, _ = apply_effects_file(str(speaker_dir/wav), EFFECTS)
+                        wav, _ = torchaudio.load(str(speaker_dir/wav), EFFECTS)
                         wav = wav.squeeze(0)
                         length = wav.shape[0]
 
@@ -111,7 +110,7 @@ class SpeakerVerifi_train(Dataset):
     
     def __getitem__(self, idx):
         wav, _ = torchaudio.load(self.dataset[idx])
-        # wav, _ = apply_effects_file(self.dataset[idx], EFFECTS)
+        # wav, _ = torchaudio.load(self.dataset[idx], EFFECTS)
         wav = wav.squeeze(0)
         length = wav.shape[0]
         
@@ -168,7 +167,7 @@ class SpeakerVerifi_dev(Dataset):
             label_info = wav_info[0]
             pair_info = wav_info[1]
 
-            wav, _ = apply_effects_file(wav_info[2], EFFECTS)
+            wav, _ = torchaudio.load(wav_info[2], EFFECTS)
             wav = wav.squeeze(0)
 
             index_end = len(wav) -self.segment_config["window"]
@@ -211,7 +210,7 @@ class SpeakerVerifi_dev(Dataset):
     def __getitem__(self, idx):
         label_info, pair_id, utter_id, seg_info, start, end, path = self.dataset[idx]
         wav, _ = torchaudio.load(path)
-        # wav, _ = apply_effects_file(path, EFFECTS)
+        # wav, _ = torchaudio.load(path, EFFECTS)
         wav = wav.squeeze(0)
         seg_tensor = wav[start:end]
 
@@ -260,7 +259,7 @@ class SpeakerVerifi_test(Dataset):
             label_info = wav_info[0]
             pair_info = wav_info[1]
             wav, _ = torchaudio.load(wav_info[2])
-            # wav, _ = apply_effects_file(wav_info[2], EFFECTS)
+            # wav, _ = torchaudio.load(wav_info[2], EFFECTS)
             wav = wav.squeeze(0)
 
             index_end = len(wav) -self.segment_config["window"]
@@ -304,7 +303,7 @@ class SpeakerVerifi_test(Dataset):
         label_info, pair_id, utter_id, seg_info, start, end, path = self.dataset[idx]
         
         wav, _ = torchaudio.load(path)
-        # wav, _ = apply_effects_file(path, EFFECTS)
+        # wav, _ = torchaudio.load(path, EFFECTS)
         wav = wav.squeeze(0)
         seg_tensor = wav[start:end]
 

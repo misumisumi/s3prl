@@ -68,9 +68,7 @@ class LoadAudio(Dataset):
         wav = torch.FloatTensor(y).view(1, -1)
 
         if self.individual_sox_effects is not None:
-            wav, sr = torchaudio.sox_effects.apply_effects_tensor(
-                wav, sr, effects=self.individual_sox_effects[index]
-            )
+            pass
 
         if sr != self.sample_rate:
             wav, sr = torchaudio.transforms.Resample(sr, self.sample_rate)(wav)

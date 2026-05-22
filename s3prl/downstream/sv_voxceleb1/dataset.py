@@ -16,7 +16,6 @@ from torchaudio import load
 from librosa.util import find_files
 from joblib.parallel import Parallel, delayed
 from torch.utils.data import DataLoader, Dataset
-from torchaudio.sox_effects import apply_effects_file
 
 
 EFFECTS = [
@@ -43,7 +42,7 @@ class SpeakerVerifi_train(Dataset):
 
             if not cache_path.is_file():
                 def trimmed_length(path):
-                    wav_sample, _ = apply_effects_file(path, EFFECTS)
+                    wav_sample, _ = torchaudio.load(path, EFFECTS)
                     wav_sample = wav_sample.squeeze(0)
                     length = wav_sample.shape[0]
                     return length
@@ -70,7 +69,7 @@ class SpeakerVerifi_train(Dataset):
     
     def __getitem__(self, idx):
         path = self.dataset[idx]
-        wav, _ = apply_effects_file(str(path), EFFECTS)
+        wav, _ = torchaudio.load(str(path), EFFECTS)
         wav = wav.squeeze(0)
         length = wav.shape[0]
         
@@ -124,7 +123,7 @@ class SpeakerVerifi_test(Dataset):
 
         x_name = x_path
 
-        wav, _ = apply_effects_file(x_path, EFFECTS)
+        wav, _ = torchaudio.load(x_path, EFFECTS)
 
         wav = wav.squeeze(0)
 

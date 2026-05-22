@@ -3,7 +3,6 @@ import xml.etree.ElementTree as ET
 from pathlib import Path
 
 from torch.utils.data.dataset import Dataset
-from torchaudio.sox_effects import apply_effects_file
 
 
 class SWS2013Testset(Dataset):
@@ -35,7 +34,7 @@ class SWS2013Testset(Dataset):
             else (self.dataset_root / "Audio" / audio_name)
         )
         audio_path = audio_path.with_suffix(".wav")
-        wav, _ = apply_effects_file(
+        wav, _ = torchaudio.load(
             str(audio_path),
             [
                 ["channels", "1"],

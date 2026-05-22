@@ -4,7 +4,6 @@ from pathlib import Path
 
 import torch
 from torch.utils.data.dataset import Dataset
-from torchaudio.sox_effects import apply_effects_file
 
 
 class QUESST14Testset(Dataset):
@@ -28,7 +27,7 @@ class QUESST14Testset(Dataset):
     def __getitem__(self, idx):
         # Load audio
         audio_path = self.data[idx]
-        wav, _ = apply_effects_file(
+        wav, _ = torchaudio.load(
             str(audio_path),
             [
                 ["channels", "1"],

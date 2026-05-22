@@ -6,7 +6,6 @@ from pathlib import Path
 
 import torch
 from torch.utils.data.dataset import Dataset
-from torchaudio.sox_effects import apply_effects_file, apply_effects_tensor
 from tqdm import tqdm
 
 
@@ -158,10 +157,10 @@ def find_queries(query_dir_path):
         list(query_dir_path.glob("*.wav")), ncols=0, desc="Load queries"
     ):
         query_name = pattern.sub("", query_path.name)
-        wav_tensor, sample_rate = apply_effects_file(
+        wav_tensor, sample_rate = torchaudio.load(
             str(query_path), [["channels", "1"], ["rate", "16000"], ["norm"]]
         )
-        trimmed, _ = apply_effects_tensor(
+        trimmed, _ = torchaudio.load(
             wav_tensor,
             sample_rate,
             [
@@ -180,7 +179,7 @@ def find_queries(query_dir_path):
 
 def path2segment(filepath, src_dur, tgt_dur, offset):
     random_shift = random.uniform(0, src_dur - tgt_dur)
-    audio_tensor, _ = apply_effects_file(
+    audio_tensor, _ = torchaudio.load(
         str(filepath),
         [
             ["channels", "1"],
@@ -200,7 +199,7 @@ def path2segment(filepath, src_dur, tgt_dur, offset):
 def tensor2segment(tensor, tgt_dur, sample_rate=16000):
     src_dur = len(tensor) / sample_rate
     random_shift = random.uniform(0, src_dur - tgt_dur)
-    audio_tensor, _ = apply_effects_tensor(
+    audio_tensor, _ = torchaudio.load(
         tensor.unsqueeze(0),
         sample_rate,
         [
